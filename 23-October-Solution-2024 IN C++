@@ -1,0 +1,49 @@
+class Solution {
+    void solve(TreeNode* root) {
+        if (!root)
+            return;
+        queue<pair<int, pair<TreeNode*, int>>> q, cpy;
+        vector<int> levelSum;
+        int level = 0;
+        levelSum.push_back(
+            root->val); 
+        q.push({level, {root, root->val}});
+        cpy.push({level, {root, root->val}});
+        while (!q.empty()) {
+            int n = q.size();
+            int lvlSum = 0;
+            while (n--) {
+                TreeNode* node = q.front().second.first;
+                q.pop();
+                int sibSum = 0;
+                if (node->left)
+                    sibSum += node->left->val;
+                if (node->right)
+                    sibSum += node->right->val;
+                if (node->left) {
+                    q.push({level + 1, {node->left, sibSum}});
+                    cpy.push({level + 1, {node->left, sibSum}});
+                }
+                if (node->right) {
+                    q.push({level + 1, {node->right, sibSum}});
+                    cpy.push({level + 1, {node->right, sibSum}});
+                }
+                lvlSum += sibSum;
+            }
+            levelSum.push_back(lvlSum);
+            ++level;
+        }
+        while (!cpy.empty()) {
+            int lvl = cpy.front().first;
+            int sibSum = cpy.front().second.second;
+            TreeNode* node = cpy.front().second.first;
+            cpy.pop();
+            node->val = levelSum[lvl] - sibSum;
+        }
+    }
+public:
+    TreeNode* replaceValueInTree(TreeNode* root) {
+        solve(root);
+        return root;
+    }
+};
