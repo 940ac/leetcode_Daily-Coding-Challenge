@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maxCount(vector<int>& banned, int n, int maxSum) {
+        sort(banned.begin(),banned.end());
+        int i=0,x=0,m = banned.size(),ans=0,y=0;
+        for(x = 1; x <= n; x++){
+            if(i<m&&x==banned[i]){
+                while(i<m&&x==banned[i]){
+                    i++;
+                }
+            }else{
+                y += x;
+                if(y<=maxSum){
+                    ans++;
+                }else
+                    break;
+            }
+        }
+        return ans;
+    }
+};
