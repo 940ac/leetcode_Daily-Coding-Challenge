@@ -1,0 +1,36 @@
+class Solution {
+private:
+    bool valid(char ch, int prev, int curr) {
+        if (ch == 'I')
+            return curr > prev;
+        else
+            return curr < prev;
+    }
+    bool helper(string& ans, string& pattern, vector<bool>& visited, int prev,
+                int idx) {
+        if (idx == pattern.size())
+            return true;
+        for (int i = 1; i <= 9; i++) {
+            if (!visited[i]) {
+                int newIdx = (ans == "") ? idx : (idx + 1);
+                bool truth = (ans == "") ? true : valid(pattern[idx], prev, i);
+                if (truth) {
+                    ans.push_back(i + '0');
+                    visited[i] = true;
+                    if (helper(ans, pattern, visited, i, newIdx))
+                        return true;
+                    visited[i] = false;
+                    ans.pop_back();
+                }
+            }
+        }
+        return false;
+    }
+public:
+    string smallestNumber(string pattern) {
+        string ans;
+        vector<bool> visited(10, false);
+        helper(ans, pattern, visited, -1, 0);
+        return ans;
+    }
+};
