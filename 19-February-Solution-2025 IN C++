@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool solve(int ind, int n, int& k, string& temp, string& result,
+               char prevchar) {
+        if (ind == n) {
+            k--;
+            if (k == 0) {
+                result = temp;
+                return true;
+            }
+            return false;
+        }
+        for (char ch = 'a'; ch <= 'c'; ch++) {
+            if (prevchar == ' ' || ch != prevchar) {
+                temp.push_back(ch);
+                if (solve(ind + 1, n, k, temp, result, ch)) {
+                    return true;
+                }
+                temp.pop_back();
+            }
+        }
+        return false;
+    }
+    string getHappyString(int n, int k) {
+        string temp = "", result = "";
+        solve(0, n, k, temp, result, ' ');
+        return result;
+    }
+};
