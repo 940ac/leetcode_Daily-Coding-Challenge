@@ -1,0 +1,37 @@
+class Solution {
+public:
+    TreeNode* recoverFromPreorder(string s) {
+        int n = s.length();
+        stack<TreeNode*> st;
+        int i = 0;
+        TreeNode* root = nullptr;
+        while (i < n) {
+            int depth = 0;
+            int num = 0;
+            while (i < n && s[i] == '-') {
+                depth++;
+                i++;
+            }
+            while (i < n && s[i] != '-') {
+                num = num * 10 + (s[i] - '0');
+                i++;
+            }
+            TreeNode* node = new TreeNode(num);
+            if (!st.empty()) {
+                while (st.size() > depth) {
+                    st.pop();
+                }
+                if (!st.top()->left) {
+                    st.top()->left = node;
+                } else {
+                    st.top()->right = node;
+                }
+            }
+            if (depth == 0) {
+                root = node;
+            }
+            st.push(node);
+        }
+        return root;
+    }
+};
