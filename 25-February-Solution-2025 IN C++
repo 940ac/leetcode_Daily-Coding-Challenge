@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int maximumPrimeDifference(vector<int>& nums) {
+        vector<int>p={2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97}; 
+        for(int i=0;i<nums.size();i++) 
+        { 
+            int ct=0; 
+            for(int j=0;j<p.size();j++) 
+            { 
+                if(nums[i]==p[j])ct++; 
+            } 
+            if(ct)nums[i]=1; 
+            else nums[i]=0; 
+        } 
+        int qt=0,pt=nums.size(); 
+        for(int i=0;i<nums.size();i++) 
+        { 
+            if(nums[i]) 
+            { 
+                pt=min(pt,i); 
+                qt=max(qt,i); 
+            } 
+        } 
+        return qt-pt;
+
+    }
+};
