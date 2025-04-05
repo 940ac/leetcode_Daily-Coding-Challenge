@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int helper(vector<int>& nums, int index, int currXor) {
+        if (index == nums.size()) {
+            return currXor;
+        }
+        return helper(nums, index + 1, currXor ^ nums[index]) +
+               helper(nums, index + 1, currXor);
+    }
+    int subsetXORSum(vector<int>& nums) { return helper(nums, 0, 0); }
+};
