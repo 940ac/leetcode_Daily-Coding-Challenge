@@ -1,0 +1,84 @@
+class Solution {
+public:
+    long long res = 0;
+    map<multiset<int>, int> seen;
+    long long fac(long long v) {
+        long long b = 1;
+        for (int i = 1; i <= v; ++i) {
+            b *= i;
+        }
+        return b;
+    }
+    void bt1(int n, int k, int index, vector<int> ongoing) {
+        if (index == (n + 1) / 2) {
+            long long num = 0;
+            long long bot = 0;
+            long long bot2 = 0;
+            vector<long long> c(10);
+            for (int i = 0; i < ongoing.size(); i++) {
+                c[ongoing[i]]++;
+                num *= 10;
+                num += ongoing[i];
+            }
+            long long top = fac(n);
+            long long top2 = top / n;
+            for (int i = 0; i <= 9; i++) {
+                if (c[i] > 0) {
+                    if (bot == 0) {
+                        bot = fac(c[i]);
+                        if (i == 0) {
+                            bot2 = fac(c[i] - 1);
+                        } else {
+                            bot2 = fac(c[i]);
+                        }
+                    } else {
+                        bot *= fac(c[i]);
+
+                        if (i == 0) {
+                            bot2 *= fac(c[i] - 1);
+                        } else {
+                            bot2 *= fac(c[i]);
+                        }
+                    }
+                }
+            }
+            if (num % k == 0) {
+                multiset<int> halfMap;
+                for (int i = 0; i < n; i++) {
+                    halfMap.insert(ongoing[i]);
+                }
+                if (!seen[halfMap]) {
+                    seen[halfMap] = 1;
+                    if (c[0] > 0) {
+                        res += ((top / bot) - (top2 / bot2));
+                    } else {
+                        res += (top / bot);
+                    }
+                }
+            }
+            return;
+        }
+        if (index == 0) {
+            for (int i = 1; i <= 9; i++) {
+                ongoing[index] = i;
+                ongoing[n - index - 1] = i;
+                bt1(n, k, index + 1, ongoing);
+                ongoing[index] = 0;
+                ongoing[n - index - 1] = 0;
+            }
+        } else {
+            for (int i = 0; i <= 9; i++) {
+                ongoing[index] = i;
+                ongoing[n - index - 1] = i;
+                bt1(n, k, index + 1, ongoing);
+                ongoing[index] = 0;
+                ongoing[n - index - 1] = 0;
+            }
+        }
+    }
+    long long countGoodIntegers(int n, int k) {
+        vector<int> ongoing(n, 0);
+        bt1(n, k, 0, ongoing);
+        return res;
+    }
+};
