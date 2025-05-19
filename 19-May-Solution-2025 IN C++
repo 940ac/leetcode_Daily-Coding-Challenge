@@ -1,0 +1,30 @@
+#include <vector>
+#include <string>
+#include <algorithm>
+
+class Solution {
+public:
+    // Function to determine the type of triangle based on side lengths
+    std::string triangleType(std::vector<int>& sides) {
+        // Sort the sides of the triangle in non-decreasing order for comparison
+        std::sort(sides.begin(), sides.end());
+
+        // Check for a triangle inequality theorem violation
+        if (sides[0] + sides[1] <= sides[2]) {
+            // The sides cannot form a triangle
+            return "none";
+        }
+        // Check if all sides are equal
+        if (sides[0] == sides[2]) {
+            // All sides are equal, so the triangle is equilateral
+            return "equilateral";
+        }
+        // Check if any two sides are equal
+        if (sides[0] == sides[1] || sides[1] == sides[2]) {
+            // Two sides are equal, so the triangle is isosceles
+            return "isosceles";
+        }
+        // If none of the above conditions are true, the triangle is scalene
+        return "scalene";
+    }
+};
