@@ -1,0 +1,35 @@
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    // Function to find the smallest subarrays for each element such that each
+    // subarray's bitwise OR is at least as large as the maximum bitwise OR
+    // of any subarray starting at that element.
+    vector<int> smallestSubarrays(vector<int>& nums) {
+        int size = nums.size(); // Store the size of the input array
+        vector<int> lastIndex(32, -1); // Track the last position of each bit
+        vector<int> result(size); // This will store the answer
+
+        // Iterate through the array in reverse order to determine
+        // the smallest subarray starting at each index
+        for (int i = size - 1; i >= 0; --i) {
+            int subarraySize = 1; // Minimum subarray size is 1 (the element itself)
+
+            // Check each bit position from 0 to 31
+            for (int bit = 0; bit < 32; ++bit) {
+                if ((nums[i] >> bit) & 1) { // If the current bit is set in nums[i]
+                    // Update the last position of this bit to the current index
+                    lastIndex[bit] = i;
+                } else if (lastIndex[bit] != -1) {
+                    // If the current bit is not set, calculate the subarraySize needed
+                    // to include this bit from further elements in the array
+                    subarraySize = max(subarraySize, lastIndex[bit] - i + 1);
+                }
+            }
+            // After checking all the bits, store the result subarray size
+            result[i] = subarraySize;
+        }
+        return result; // Return the final vector with smallest subarray sizes
+    }
+};
